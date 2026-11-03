@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Price Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 30px auto; padding: 0 15px; }
+        form { margin-bottom: 20px; }
+        input, select, button { padding: 8px; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>Book Price Tracker</h1>
+
+    <!-- GET form: puts the search and sort values into the URL, which app.py reads -->
+    <form method="get">
+        <input type="text" name="search" placeholder="Search by title" value="{{ search }}">
+        <select name="sort">
+            <option value="title" {% if sort == "title" %}selected{% endif %}>Title (A-Z)</option>
+            <option value="price_asc" {% if sort == "price_asc" %}selected{% endif %}>Price: low to high</option>
+            <option value="price_desc" {% if sort == "price_desc" %}selected{% endif %}>Price: high to low</option>
+            <option value="rating_desc" {% if sort == "rating_desc" %}selected{% endif %}>Rating: high to low</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+    <p>Showing {{ books|length }} books</p>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Rating</th>
+            <th>Stock</th>
+        </tr>
+        <!-- repeats one table row for every book -->
+        {% for book in books %}
+        <tr>
+            <td>{{ book["title"] }}</td>
+            <td>£{{ book["price"] }}</td>
+            <td>{{ "★" * book["rating"] }}</td>
+            <td>{{ "In stock" if book["in_stock"] else "Out of stock" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
